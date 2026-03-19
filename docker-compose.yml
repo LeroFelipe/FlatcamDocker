@@ -1,0 +1,17 @@
+services:
+  flatcam:
+    build: .
+    container_name: flatcam_gui
+    environment:
+      - DISPLAY=${DISPLAY}
+      - WAYLAND_DISPLAY=${WAYLAND_DISPLAY}
+      - XDG_RUNTIME_DIR=/run/user/1000
+      - QT_QPA_PLATFORM=xcb # O FlatCAM costuma ser mais estável via xcb (XWayland)
+#      - LIBGL_ALWAYS_SOFTWARE=1
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY}:/run/user/1000/${WAYLAND_DISPLAY}
+      - .:/app/projects
+    devices:
+      - /dev/dri:/dev/dri
+    network_mode: host
