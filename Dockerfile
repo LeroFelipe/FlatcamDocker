@@ -3,7 +3,7 @@ FROM debian:bookworm-slim
 # Evita que o apt fique fazendo perguntas durante a instalação
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Dependências do sistema e do Qt/OpenGL
+# Adicionamos libglu1-mesa para resolver o erro de gluNewTess
 RUN apt-get update && apt-get install -y \
     git \
     python3 \
@@ -25,6 +25,7 @@ RUN apt-get update && apt-get install -y \
     libglib2.0-0 \
     libcairo2-dev \
     pkg-config \
+    libglu1-mesa \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -32,12 +33,11 @@ WORKDIR /app
 # Baixamos o FlatCAM Beta
 RUN git clone -b Beta https://bitbucket.org/jpcgt/flatcam.git .
 
-# Criamos o ambiente virtual herdeiro
+# Criamos o ambiente virtual
 RUN python3 -m venv /opt/venv --system-site-packages
 ENV PATH="/opt/venv/bin:$PATH"
 
-# A lista final e exata de bibliotecas PIP para o Beta
-# A lista final e exata de bibliotecas PIP para o Beta
+# Instalamos o pacotão de dependências (com a trava do NumPy 1.x)
 RUN pip install --no-cache-dir \
     "numpy<2" \
     vispy==0.7 \
