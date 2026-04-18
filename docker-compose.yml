@@ -4,15 +4,12 @@ services:
     container_name: flatcam_gui
     environment:
       - DISPLAY=${DISPLAY}
-      - WAYLAND_DISPLAY=${WAYLAND_DISPLAY}
+      - QT_QPA_PLATFORM=xcb
       - XDG_RUNTIME_DIR=/run/user/1000
-      - QT_QPA_PLATFORM=xcb # O FlatCAM costuma ser mais estável via xcb (XWayland)
-      - XAUTHORITY=/tmp/.Xauthority
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
-      - ${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY}:/run/user/1000/${WAYLAND_DISPLAY}
-      - .:/app/projects
-      - ~/.Xauthority:/tmp/.Xauthority:ro
-    devices:
-      - /dev/dri:/dev/dri
+      - ./projects:/app/projects
+      - /dev:/dev
     network_mode: host
+    privileged: true
+    restart: "no"

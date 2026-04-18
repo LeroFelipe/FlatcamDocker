@@ -1,9 +1,7 @@
 FROM debian:bookworm-slim
 
-# Evita que o apt fique fazendo perguntas durante a instalação
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Adicionamos libglu1-mesa para resolver o erro de gluNewTess
 RUN apt-get update && apt-get install -y \
     git \
     python3 \
@@ -26,18 +24,16 @@ RUN apt-get update && apt-get install -y \
     libcairo2-dev \
     pkg-config \
     libglu1-mesa \
+    libxcb-xinerama0 \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Baixamos o FlatCAM Beta
 RUN git clone -b Beta https://bitbucket.org/jpcgt/flatcam.git .
 
-# Criamos o ambiente virtual
 RUN python3 -m venv /opt/venv --system-site-packages
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Instalamos o pacotão de dependências (com a trava do NumPy 1.x)
 RUN pip install --no-cache-dir \
     "numpy<2" \
     vispy==0.7 \
@@ -55,5 +51,7 @@ RUN pip install --no-cache-dir \
     dill \
     requests \
     pyserial
+
+RUN mkdir -p /app/projects && chmod 777 /app/projects
 
 CMD ["python3", "FlatCAM.py"]
