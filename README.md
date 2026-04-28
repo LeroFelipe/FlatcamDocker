@@ -10,10 +10,10 @@ Testado com sucesso em:
 
 ## 🚀 Como Iniciar
 
-O projeto utiliza um script de entrada (`run.sh`) que configura as permissões de vídeo e mapeia o usuário automaticamente.
+O projeto utiliza um script de entrada (`flatcam.sh`) que configura as permissões de vídeo e mapeia o usuário automaticamente.
 
 1. Garanta que o script tenha permissão de execução:
-   chmod +x run.sh
+   chmod +x flatcam.sh
 
 2. Inicie o container:
    ./flatcam.sh
